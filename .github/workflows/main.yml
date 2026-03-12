@@ -1,24 +1,23 @@
 name: Binance DevOps CI
 
 on:
-        push:
-                branches: ["main"]
+  push:
+    branches: [ "main" ]
+
 jobs:
-        build-and-test:
-                runs-on: ubuntu-latest
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 1. 檢出代碼
+        uses: actions/checkout@v4
 
-                steps:
-                        - name: 1. 檢測代碼
-                         uses: actions/checkout@v4
+      - name: 2. 模擬測試 Docker 打包
+        run: |
+          docker build -t test-image .
+          echo "Docker 打包測試通過！"
 
-                        - name: 2. 模擬測試 Docker 打包
-                         run: |
-                                 docker build -t test-image .
-                                 echo "Docker 打包測試通過!"
-
-                        - name: 3. 執行Python 語法檢查
-                         run: |
-                                 python3 -m py_compile monitor.py
-                                 echo "Python 腳本語法正確!"
-
-
+      - name: 3. 執行 Python 語法檢查
+        run: |
+          python3 -m py_compile monitor.py
+          echo "Python 腳本語法正確！"
